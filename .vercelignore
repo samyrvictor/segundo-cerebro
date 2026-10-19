@@ -1,0 +1,9 @@
+# Nunca enviar segredos nem arquivos locais para a Vercel.
+.env*
+.notion-oauth.json
+.sync-estado.json
+sync.log
+.git
+node_modules
+.next
+*.tsbuildinfo

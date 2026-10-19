@@ -33,9 +33,19 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# token OAuth do Notion, salvo localmente pelo fluxo de login
+.notion-oauth.json
+
+# estado e log do sincronizador com o Obsidian
+.sync-estado.json
+sync.log
+
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel
+.env*

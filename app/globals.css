@@ -1,26 +1,234 @@
 @import "tailwindcss";
 
+/* Estilo Apple, branco e laranja: fundo cinza-gelo, painéis brancos, texto quase preto. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  --background: #f5f5f7;
+  --surface: #ffffff;
+  --foreground: #1d1d1f;
+  --muted: #6e6e73;
+  --primary: #ff5a1f;
+  --primary-strong: #e0480f;
+  --primary-soft: #fff0e8;
+  --border: #e5e5ea;
+  --danger: #d70015;
+
+  --sidebar-bg: rgba(250, 250, 252, 0.78);
+  --sidebar-fg: #1d1d1f;
+  --sidebar-muted: #6e6e73;
+  --sidebar-border: rgba(0, 0, 0, 0.06);
+  --sidebar-active-bg: rgba(255, 90, 31, 0.1);
+
+  --suave: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-soft: var(--primary-soft);
+  --color-border: var(--border);
+  --color-danger: var(--danger);
+  --color-sidebar-bg: var(--sidebar-bg);
+  --color-sidebar-fg: var(--sidebar-fg);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-active-bg: var(--sidebar-active-bg);
+  --font-display: var(--font-inter);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-plex-mono);
+  --ease-suave: var(--suave);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  letter-spacing: -0.011em;
+  caret-color: var(--primary);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+  letter-spacing: -0.022em;
+}
+
+::selection {
+  background: var(--primary-soft);
+  color: var(--foreground);
+}
+
+a,
+button,
+input,
+select,
+summary,
+label {
+  touch-action: manipulation;
+}
+
+a {
+  text-underline-offset: 3px;
+}
+
+button,
+a,
+input,
+select,
+summary {
+  transition:
+    background-color 180ms var(--suave),
+    color 180ms var(--suave),
+    box-shadow 180ms var(--suave),
+    opacity 180ms var(--suave),
+    transform 180ms var(--suave);
+}
+
+:focus-visible {
+  outline: 3px solid rgba(255, 90, 31, 0.35);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+* {
+  scrollbar-color: #c7c7cc transparent;
+  scrollbar-width: thin;
+}
+
+/* --- Peças reutilizáveis ------------------------------------------------ */
+
+/* Painel branco da "lista agrupada": só sombra suave, sem borda. */
+@utility painel {
+  background: var(--surface);
+  border-radius: 18px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 6px 24px rgba(0, 0, 0, 0.05);
+}
+
+/* Campo de texto sem borda, cinza suave; anel laranja no foco. */
+@utility campo {
+  background: rgba(118, 118, 128, 0.1);
+  border-radius: 12px;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.94rem;
+  outline: none;
+  &::placeholder {
+    color: var(--muted);
+  }
+  &:focus {
+    background: var(--surface);
+    box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.3);
+  }
+}
+
+/* Botão principal em pílula. */
+@utility botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.94rem;
+  padding: 0.55rem 1.15rem;
+  &:hover {
+    background: var(--primary-strong);
+  }
+  &:active {
+    transform: scale(0.97);
+  }
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+/* Controle segmentado (filtros). */
+@utility segmentos {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 11px;
+  background: rgba(118, 118, 128, 0.12);
+}
+
+@utility segmento {
+  border-radius: 8px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--foreground);
+  &[aria-pressed="true"] {
+    background: var(--surface);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.08),
+      0 3px 8px rgba(0, 0, 0, 0.06);
+  }
+  &[aria-pressed="false"]:hover {
+    color: var(--foreground);
+    background: rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* --- Movimento ------------------------------------------------------------ */
+
+/* Uma única entrada suave quando a página abre. */
+@keyframes surgir {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.entrada {
+  animation: surgir 420ms var(--suave) both;
+}
+
+.marca-texto-progresso {
+  transition: width 500ms var(--suave);
+}
+
+@keyframes pulse-node {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.blinking-cursor {
+  animation: pulse-node 1s steps(2, jump-none) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

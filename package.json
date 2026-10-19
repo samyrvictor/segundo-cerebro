@@ -6,21 +6,31 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sincronizar": "tsx scripts/sincronizar.ts",
+    "videos": "tsx scripts/videos.ts",
+    "test:sync": "tsx --test scripts/decidir.test.ts"
   },
   "dependencies": {
+    "@notionhq/client": "^5.26.0",
+    "@supabase/supabase-js": "2.117.3",
+    "d3-force": "3.0.0",
+    "gray-matter": "^4.0.3",
     "next": "16.3.4",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "unpdf": "1.8.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/d3-force": "3.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "^4",
+    "tsx": "4.23.15",
     "typescript": "^5"
   }
 }

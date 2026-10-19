@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Segundo Cérebro — frontend
 
-## Getting Started
+App local (Next.js) que arquiva conteúdo como páginas `tipo: fonte` no wiki
+pessoal (`../segundo-celebro/wiki/fontes/`, `../segundo-celebro/index.md`,
+`../segundo-celebro/log.md` — ver `../CLAUDE.md`). `segundo-celebro/` é a
+pasta que você abre como vault no Obsidian — fica separada de `frontend/`
+de propósito, pra não misturar código/`node_modules` no grafo.
 
-First, run the development server:
+**Sem IA em lugar nenhum** — tudo é busca/leitura de conteúdo bruto, sem
+resumo automático. Foi assim por escolha: a versão anterior tinha vídeo e
+resumo de link/página via API paga da Anthropic; decidiu-se remover isso e
+ficar só com o que funciona de graça.
+
+## Como rodar
 
 ```bash
+npm install
+cp .env.local.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra http://localhost:3000. Nenhuma variável de ambiente é obrigatória —
+só preencha `.env.local` se for usar o Notion (ver seção abaixo).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Seções
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Texto** — cola um texto (salva como está) ou um link sozinho (busca o
+  conteúdo — README puro se for GitHub, texto da página nos outros casos).
+- **Buscar** — busca por palavra-chave em título/tags/conteúdo de tudo que
+  já foi salvo.
+- **Assuntos** — agrupa as fontes por um campo `assunto` escolhido ao salvar
+  (Engenharia de Software, IA, Inglês, Empreendedorismo, Oratória).
+- **Chrome** — botão que lê a barra de favoritos do Chrome local e busca o
+  conteúdo de cada link, sem IA.
+- **Notion** — botão "Conectar com Notion" (OAuth) + "Sincronizar", que traz
+  o conteúdo puro da área "Ideias e Anotações".
 
-## Learn More
+## Requisitos no sistema
 
-To learn more about Next.js, take a look at the following resources:
+- **Favoritos do Chrome** — lê o perfil "Default" deste PC direto do
+  arquivo local. Troque via `CHROME_PROFILE_DIR` em `.env.local`.
+- **Notion** — precisa de uma integração OAuth própria (instruções em
+  `.env.local.example`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Limitações conhecidas
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Roda só localmente — não há deploy/publicação configurada.
+- Sem revisão antes de salvar: a página vai direto pro wiki. Edite ou
+  apague pelo Obsidian se algo sair errado.
+- Sem resumo/tags automáticos — o conteúdo é salvo como está, sem IA.
