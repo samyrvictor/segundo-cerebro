@@ -1,50 +1,67 @@
-# Segundo Cérebro — frontend
+# Segundo Cérebro
 
-App local (Next.js) que arquiva conteúdo como páginas `tipo: fonte` no wiki
-pessoal (`../segundo-celebro/wiki/fontes/`, `../segundo-celebro/index.md`,
-`../segundo-celebro/log.md` — ver `../CLAUDE.md`). `segundo-celebro/` é a
-pasta que você abre como vault no Obsidian — fica separada de `frontend/`
-de propósito, pra não misturar código/`node_modules` no grafo.
+App pessoal de notas, rotina e produtividade — "segundo cérebro" no estilo
+Obsidian, só que online. Guarda texto, links e transcrições de vídeo **sem
+resumo de IA** (conteúdo bruto, buscável), e junto disso organiza rotina
+diária, quadro de tarefas, estudos e um plano de inglês.
 
-**Sem IA em lugar nenhum** — tudo é busca/leitura de conteúdo bruto, sem
-resumo automático. Foi assim por escolha: a versão anterior tinha vídeo e
-resumo de link/página via API paga da Anthropic; decidiu-se remover isso e
-ficar só com o que funciona de graça.
+Feito pra uso próprio, com login por senha única (não é multiusuário).
 
-## Como rodar
+## Stack
+
+- **Next.js 16** (App Router) + TypeScript + React 19 + Tailwind v4
+- **Supabase** (Postgres) como banco — todo acesso é feito pelo servidor,
+  nunca direto do navegador
+- **Vercel** para deploy
+
+## Como rodar localmente
 
 ```bash
 npm install
-cp .env.local.example .env.local
+cp .env.local.example .env.local   # preencha os valores
 npm run dev
 ```
 
-Abra http://localhost:3000. Nenhuma variável de ambiente é obrigatória —
-só preencha `.env.local` se for usar o Notion (ver seção abaixo).
+Abra http://localhost:3000. Veja `.env.local.example` para o que cada
+variável faz (Supabase, senha do app, OAuth do Notion, etc.).
 
-## Seções
+## Funcionalidades
 
-- **Texto** — cola um texto (salva como está) ou um link sozinho (busca o
-  conteúdo — README puro se for GitHub, texto da página nos outros casos).
-- **Buscar** — busca por palavra-chave em título/tags/conteúdo de tudo que
-  já foi salvo.
-- **Assuntos** — agrupa as fontes por um campo `assunto` escolhido ao salvar
-  (Engenharia de Software, IA, Inglês, Empreendedorismo, Oratória).
-- **Chrome** — botão que lê a barra de favoritos do Chrome local e busca o
-  conteúdo de cada link, sem IA.
-- **Notion** — botão "Conectar com Notion" (OAuth) + "Sincronizar", que traz
-  o conteúdo puro da área "Ideias e Anotações".
+- **Início** — visão do dia: checklist do dia, o que está em andamento no
+  quadro, tabela da semana.
+- **Rotina** — calendário do ano inteiro; clica numa data e edita o checklist
+  daquele dia direto (sem hábito fixo recorrente — cada dia é independente).
+- **Quadro** — kanban de tarefas (A fazer / Fazendo / Feito), com área por
+  cartão e arrastar-e-soltar.
+- **Inglês** — roteiro de estudo (Fase 1, 12 semanas) com progresso salvo.
+- **Estudos** — lista de tópicos que você está estudando, marcáveis.
+- **Texto** — cola um texto, trecho de aula ou um link (GitHub, artigo,
+  Google Docs, vídeo) e o app busca o conteúdo sozinho.
+- **Buscar** (Ctrl+K) — busca full-text em tudo que já foi guardado.
+- **Grafo** — as notas conectadas por `[[links]]`, como no grafo do Obsidian.
+- **Sincronizar** — status da sincronização com Obsidian, Notion e Chrome.
+- **Pomodoro** — temporizador de foco, com estatísticas do dia.
 
-## Requisitos no sistema
+Vídeos (YouTube/TikTok/Instagram) entram numa fila e são processados depois,
+no PC, via transcrição (ver `CLAUDE.md` na raiz do repositório para o fluxo
+completo).
 
-- **Favoritos do Chrome** — lê o perfil "Default" deste PC direto do
-  arquivo local. Troque via `CHROME_PROFILE_DIR` em `.env.local`.
-- **Notion** — precisa de uma integração OAuth própria (instruções em
-  `.env.local.example`).
+## Sincronização com o Obsidian
 
-## Limitações conhecidas
+`npm run sincronizar` espelha o banco num vault local do Obsidian (pasta
+`segundo-celebro/`, fora deste repositório) — mão dupla, por hash de 3 vias.
+Notas editadas no Obsidian sobem pro banco; o banco é a fonte de verdade em
+caso de conflito.
 
-- Roda só localmente — não há deploy/publicação configurada.
-- Sem revisão antes de salvar: a página vai direto pro wiki. Edite ou
-  apague pelo Obsidian se algo sair errado.
-- Sem resumo/tags automáticos — o conteúdo é salvo como está, sem IA.
+## Deploy
+
+```bash
+npx vercel deploy --prod
+```
+
+`.vercelignore` impede que segredos ou o vault local subam junto.
+
+## Sem IA
+
+Texto e link são salvos como estão — nenhum resumo automático. Escolha de
+propósito: manter o app funcionando de graça, sem depender de API paga.
