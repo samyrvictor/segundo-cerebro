@@ -49,3 +49,9 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# worktrees for isolated plan execution
+.worktrees/
+
+# graphify knowledge-graph output
+graphify-out/
