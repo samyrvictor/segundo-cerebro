@@ -58,6 +58,9 @@ export async function salvarTextoBruto(opts: SalvarTextoOpts) {
   const slug = await proximoSlugDisponivel(slugify(titulo));
   const dataIngestao = hoje();
   const plataforma = opts.plataforma ?? "texto colado";
+  // Com assunto, a fonte nasce direto numa subpasta de wiki/fontes/ (uma
+  // pasta por assunto/skill) — sem assunto, continua solta como sempre foi.
+  const caminho = opts.assunto ? `wiki/fontes/${slugify(opts.assunto)}/${slug}.md` : `wiki/fontes/${slug}.md`;
 
   const frontmatter = [
     "---",
@@ -81,7 +84,7 @@ export async function salvarTextoBruto(opts: SalvarTextoOpts) {
       .from("fontes")
       .insert({
         slug,
-        caminho: `wiki/fontes/${slug}.md`,
+        caminho,
         titulo,
         plataforma,
         url: opts.url ?? null,

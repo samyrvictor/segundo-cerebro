@@ -4,6 +4,8 @@ export interface SemanaIngles {
   gramatica: { titulo: string; explicacao: string; exemplos: string[] };
   // [inglês, português] — 70 por semana
   vocab: [string, string][];
+  // [inglês, português] — frases de exemplo pro Anki/"Frase do dia"; opcional, preenchida conforme a semana é vivida
+  frases?: [string, string][];
   recursos: string[];
   input: string;
   shadowing: string;

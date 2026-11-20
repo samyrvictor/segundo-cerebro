@@ -4,6 +4,25 @@ import { useEffect, useState } from "react";
 import { ESTRATEGIA, FASES, PERFIL, SEMANAS, TOTAL_DIAS, diasDaSemana } from "@/lib/ingles/plano";
 import { IconeProximo } from "./Icones";
 
+// Troca de frase sozinha a cada 7s — usada ao lado de Recursos/Micro-hábito.
+function FraseRotativa({ frases }: { frases: [string, string][] }) {
+  const [indice, setIndice] = useState(0);
+
+  useEffect(() => {
+    if (frases.length < 2) return;
+    const id = setInterval(() => setIndice((i) => (i + 1) % frases.length), 7000);
+    return () => clearInterval(id);
+  }, [frases]);
+
+  const [en, pt] = frases[indice];
+  return (
+    <div key={indice} className="entrada">
+      <p className="text-sm font-medium">{en}</p>
+      <p className="mt-0.5 text-xs text-muted">{pt}</p>
+    </div>
+  );
+}
+
 export function InglesView() {
   const [feitos, setFeitos] = useState<string[]>([]);
   const [carregando, setCarregando] = useState(true);
@@ -152,7 +171,7 @@ export function InglesView() {
                   </ul>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className={`grid gap-4 md:grid-cols-2 ${s.frases?.length ? "lg:grid-cols-3" : ""}`}>
                   <div>
                     <p className="text-xs font-medium text-muted">Recursos</p>
                     <ul className="mt-2 flex list-disc flex-col gap-1 pl-5 text-sm">
@@ -165,6 +184,14 @@ export function InglesView() {
                     <p className="text-xs font-medium text-muted">Micro-hábito da semana</p>
                     <p className="mt-2 text-sm">{s.microHabito}</p>
                   </div>
+                  {s.frases?.length ? (
+                    <div>
+                      <p className="text-xs font-medium text-muted">Frase da semana</p>
+                      <div className="mt-2">
+                        <FraseRotativa frases={s.frases} />
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
 
                 <details>
